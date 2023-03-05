@@ -1,5 +1,5 @@
 import './css/styles.css';
-import fetchImages from './fetch';
+import {fetchImages} from './fetch';
 const submitSearch= document.getElementById('search-form')
 const listDivEl= document.querySelector('div')
 const fetchImages = new fetchImages();
