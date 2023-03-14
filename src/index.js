@@ -1,8 +1,14 @@
 import './css/styles.css';
 import {fetchImages} from './fetch';
 import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 const submitSearch= document.getElementById('search-form')
 const listDivEl= document.querySelector('.gallery-cards')
+const simplelightbox = new SimpleLightbox('.gallery-cards a', { 
+  captions: true,
+  captionsData: 'alt',
+  captionDelay: 300,
+});
 
 let query = ''
 let page = 1
@@ -12,6 +18,7 @@ submitSearch.addEventListener('submit', onSearchForm)
 
 function onSearchForm(e) {
     e.preventDefault();  
+    listDivEl.innerHTML =''
     query = e.currentTarget.searchQuery.value.trim()
 
    // console.log(query);
@@ -65,13 +72,17 @@ console.log('data ----',{data})
 // const addCreateGallery = createGallery(data);
 
 listDivEl.insertAdjacentHTML('beforeEnd', createGallery(data));
+simplelightbox.refresh();
 
-new SimpleLightbox('.gallery a', {
+
+
+
+/* new SimpleLightbox('.gallery a', {
   captions: true,
   captionsData: 'alt',
   captionDelay: 300,
 });
-
+ */
 
 
 
