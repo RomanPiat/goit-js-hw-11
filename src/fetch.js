@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
 const API_KEY= '33909260-89de06c1dbdf0a64f541db612';
@@ -10,7 +11,8 @@ try {
 
         return response;
 } catch (error) {
-    console.log('ошибка catch', error);
+    console.log('ошибка catch', error.response.status);
+   if ( error.response.status = 400) Notify.warning("We're sorry, but you've reached the end of search results.")
 }
     }
 

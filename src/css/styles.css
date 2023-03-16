@@ -12,6 +12,7 @@ body {
   line-height: 1.5;
 }
 
+
 #search-box {
   font: inherit;
   padding: 8px;
@@ -50,11 +51,14 @@ li {
   margin-right: auto;
   margin-bottom: 30px;
 }
+
+
 img {
   display: block;
-  max-width: 100%;
-  height: auto;
-}
+  width: 100%;
+  height: 250px;
+} 
+
 .info {
   display: flex;
   flex-wrap: nowrap;
@@ -72,4 +76,31 @@ img {
   width: 100%;
   height: 200px;
   object-fit: cover;
+}
+
+.hidden {
+  display:none
+}
+
+.search-part {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: fixed;
+  background-color: #2d2d2e;
+  margin-top: -60px;
+  z-index: 1;
+}
+
+.search-form {
+  margin-left: 40%;
+}
+
+.gallery-part {
+margin-top: 60px;
+}
+
+.photo-card:hover,
+.photo-card:focus {
+  transform: scale(1.05);
 }

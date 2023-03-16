@@ -9,19 +9,24 @@
 
   </head>
   <body>
+    <div class="search-part">
+      <form class="search-form" id="search-form">
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
 
-
-    <form class="search-form" id="search-form">
-      <input
-        type="text"
-        name="searchQuery"
-        autocomplete="off"
-        placeholder="Search images..."
-      />
-      <button type="submit">Search</button>
-    </form>
-    <div class="gallery-cards"></div>
-
+    <div class="gallery-part">
+      <div class="gallery-cards"></div>
+      <div class="end-gallery">
+        <span>The END</span>
+      </div>
+    </div>
     <script src="index.js" type="module"></script>
   </body>
 </html>
