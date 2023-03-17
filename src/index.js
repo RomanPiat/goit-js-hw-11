@@ -43,6 +43,7 @@ for (let elm of elements) {
 
 // запуск поиска и сброс первоначальных параметров
 function startSearch(e) {
+  console.log('start search')
 query = ''
 page = 1
 endRenderFlagUrl = false;
@@ -77,7 +78,7 @@ function onSearchForm(e) {
               listEnd.classList.remove('hidden'); // скрываю элемент конца страницы
           }
             if (page === totalPages) {
-//            console.log('переключение флага endRenderFlagUrl')
+            console.log('переключение флага endRenderFlagUrl')
               endRenderFlagUrl = true;
          }   
         }) 
