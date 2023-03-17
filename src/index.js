@@ -13,25 +13,24 @@ const simplelightbox = new SimpleLightbox('.gallery-cards a', {
   captionDelay: 300,
 });
 
-let query = ''
-let page = 1
-let perPage = 40
+let query = '';
+let page = 1;
+let perPage = 40;
+let endRenderFlagUrl = false;
+let totalPages = 1;
 window.preventAction = true;
-let newSearch = true;
-let errorFlagUrl = false;
 
 listEnd.classList.add('hidden');
 
-
-submitSearch.addEventListener('submit', startSearch)
+submitSearch.addEventListener('submit', startSearch);
 
 // отлавливаю конец страницы при скроле
 function onEntry(entry) {
   entry.forEach(change => {
-    if (change.isIntersecting) {
-      console.log('eND')
-      page += 1
-      onSearchForm()
+    if (change.isIntersecting & !endRenderFlagUrl) {
+      console.log('eND');
+      page += 1;
+      onSearchForm();
     }
   });
 }
@@ -42,10 +41,11 @@ for (let elm of elements) {
   observer.observe(elm);
 }
 
-// запуск поиска и сброс параметров
+// запуск поиска и сброс первоначальных параметров
 function startSearch(e) {
 query = ''
 page = 1
+endRenderFlagUrl = false;
 window.preventAction = true; 
 listDivEl.innerHTML = '';
 listEnd.classList.add('hidden');
@@ -54,11 +54,7 @@ onSearchForm(e)
 
 // поиск
 function onSearchForm(e) {
-  console.log('page', page)
-  console.log('window', window.preventAction)
-  console.log('errorFlagUrl', errorFlagUrl)
-  if(errorFlagUrl) return
-
+  if(endRenderFlagUrl) return
 
   if (window.preventAction) {
     e.preventDefault();
@@ -66,40 +62,51 @@ function onSearchForm(e) {
     window.preventAction = false;
   }
 
+//  console.log('page', page)
+//  console.log('window', window.preventAction)
+//  console.log('endRenderFlagUrl', endRenderFlagUrl)
+//  console.log('totalPages', totalPages)
+
     fetchImages(query, page, perPage) 
         .then(({data}) => {
+          totalPages = Math.ceil(data.totalHits/perPage)
           alertTotalHits(data);
             if (data.totalHits !== 0) {
-            
-            console.log({data})
-
-        listDivEl.insertAdjacentHTML('beforeEnd', createGallery(data));
-        simplelightbox.refresh();
-        listEnd.classList.remove('hidden'); // скрываю элемент конца страницы
+              listDivEl.insertAdjacentHTML('beforeEnd', createGallery(data));
+              simplelightbox.refresh();
+              listEnd.classList.remove('hidden'); // скрываю элемент конца страницы
           }
+            if (page === totalPages) {
+//            console.log('переключение флага endRenderFlagUrl')
+              endRenderFlagUrl = true;
+         }   
         }) 
 
         .catch(error => {
-          alertTotalHits(data);
-          errorFlagUrl = true;
-          console.log('ошибка catch----', error.response.status);
+          Notify.failure(`Error server: ${error}`);//Ошибка сервера
+          endRenderFlagUrl = true;
         })
 }
 
+// вывод сообщений Notify
 function alertTotalHits(data) {
-  console.log('match', Math.ceil(data.totalHits/perPage+1), 'page', page)
-
-  if (page === Math.ceil(data.totalHits/perPage+1)) {
-  Notify.warning("We're sorry, but you've reached the end of search results.")
-  }  
+//  console.log('match', totalPages, 'page', page)
+//  console.log('data.totalHits', data.totalHits)
 
   if (data.totalHits === 0) {
     Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+    endRenderFlagUrl = true;
+    return
   } 
 
-  if (page === 1) {
-  Notify.success(`Hooray! We found ${data.totalHits} images.`);
-  }
+  if (page === totalPages & page !==1) {
+    Notify.warning("We're sorry, but you've reached the end of search results.")
+    return;
+  }  
 
+  if (page === 1) {
+    Notify.success(`Hooray! We found ${data.totalHits} images.`);
+    return;
+  }
 }
 
